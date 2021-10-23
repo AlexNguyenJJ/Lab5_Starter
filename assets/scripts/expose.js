@@ -2,36 +2,42 @@
 
 window.addEventListener('DOMContentLoaded', init);
 
-function init() {
+function bindListeners() {
+  
+  // Query needed elements
+  var hornSelect = document.getElementById("horn-select");
+  var imgHorn = document.querySelector("#expose img");
+  var audioHorn = document.querySelector(".hidden");
+  var audioSlider = document.querySelector("#volume-controls input[type='range']");
+  var volumeLevelIcon = document.querySelector("#volume-controls img");
+  var playButton = document.querySelector("#volume-controls ~ button");
+  var partyHorn = false;
 
+  const jsConfetti = new JSConfetti(); // Enable confetti
+
+  
   /* Change the sound file and image displayed based on selection */
 
-  // Get the <section> HTML element for horns
-  var hornSelect = document.getElementById("horn-select");
-  // Create an EventListener for when there is a change in horn value and change
-  // img accordingly
   hornSelect.addEventListener('change', (event) => {
-
-    // Select horn image using CSS for "#expose img"
-    let imgHorn = document.querySelector("#expose img");
-    // Select audio file using CSS for ".hidden"
-    let audioHorn = document.querySelector(".hidden");
 
     switch (event.target.value) {
       case "air-horn":
         imgHorn.setAttribute("src", "assets/images/air-horn.svg");
         imgHorn.setAttribute("alt", "Air horn selected");
         audioHorn.setAttribute("src", "assets/audio/air-horn.mp3");
+        partyHorn = false;
         break;
       case "car-horn":
         imgHorn.setAttribute("src", "assets/images/car-horn.svg");
         imgHorn.setAttribute("alt", "Car horn selected");
         audioHorn.setAttribute("src", "assets/audio/car-horn.mp3");
+        partyHorn = false;
         break;
       case "party-horn":
         imgHorn.setAttribute("src", "assets/images/party-horn.svg");
         imgHorn.setAttribute("alt", "Party horn selected");
         audioHorn.setAttribute("src", "assets/audio/party-horn.mp3");
+        partyHorn = true;
         break;
       default:
         console.log("invalid option");
@@ -39,12 +45,8 @@ function init() {
   })
 
   /* Audio Slider option */
-  var audioSlider = document.querySelector("#volume-controls input[type='range']");
-  var volumeLevelIcon = document.querySelector("#volume-controls img");
-  audioSlider.addEventListener('input', (event) => {
 
-    // Select audio file using CSS for ".hidden"
-    let audioHorn = document.querySelector(".hidden");
+  audioSlider.addEventListener('input', (event) => {
 
     if (event.target.value == 0) {
       volumeLevelIcon.setAttribute("src", "assets/icons/volume-level-0.svg");
@@ -65,4 +67,16 @@ function init() {
     audioHorn.volume = (event.target.value / 100);
   })
   
+  /* Play Button Event */
+  
+  playButton.addEventListener('click', (event) => {
+    if (partyHorn) {
+      jsConfetti.addConfetti();
+    }
+    audioHorn.play();
+  })
+}
+
+function init() {
+  bindListeners();
 }
