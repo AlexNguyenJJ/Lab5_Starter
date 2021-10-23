@@ -6,7 +6,15 @@ window.addEventListener('DOMContentLoaded', init);
  * Binds EventListeners
  */
 function bindListeners() {
+  var pressToTalkButton = document.querySelector("#explore button");
 
+  pressToTalkButton.addEventListener('click', (event) => {
+    let textArea = document.querySelector("#explore textarea");
+    let textToBeSpoken = textArea.value;
+    console.log(textToBeSpoken);
+    let utterance = new SpeechSynthesisUtterance(textToBeSpoken);
+    speechSynthesis.speak(utterance);
+  })
 }
 
 /**
@@ -35,5 +43,8 @@ function loadVoices() {
 }
 
 function init() {
+  bindListeners();
   window.onload = loadVoices();
+
+  
 }
