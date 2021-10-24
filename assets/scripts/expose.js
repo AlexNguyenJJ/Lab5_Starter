@@ -12,10 +12,11 @@ function bindListeners() {
   var volumeLevelIcon = document.querySelector("#volume-controls img");
   var playButton = document.querySelector("#volume-controls ~ button");
   var partyHorn = false;
+  var volume = audioSlider.value; // reference for use when checking if its muted
+                                  // or not for confetti
 
   const jsConfetti = new JSConfetti(); // Enable confetti
 
-  
   /* Change the sound file and image displayed based on selection */
 
   hornSelect.addEventListener('change', (event) => {
@@ -47,16 +48,16 @@ function bindListeners() {
   /* Audio Slider option */
 
   audioSlider.addEventListener('input', (event) => {
-
-    if (event.target.value == 0) {
+    volume = event.target.value;
+    if (volume == 0) {
       volumeLevelIcon.setAttribute("src", "assets/icons/volume-level-0.svg");
       volumeLevelIcon.setAttribute("alt", "Volume level 0");
     }
-    else if (event.target.value < 33) {
+    else if (volume < 33) {
       volumeLevelIcon.setAttribute("src", "assets/icons/volume-level-1.svg");
       volumeLevelIcon.setAttribute("alt", "Volume level 1");
     }
-    else if (event.target.value < 67) {
+    else if (volume < 67) {
       volumeLevelIcon.setAttribute("src", "assets/icons/volume-level-2.svg");
       volumeLevelIcon.setAttribute("alt", "Volume level 2");
     } else {
@@ -64,13 +65,13 @@ function bindListeners() {
       volumeLevelIcon.setAttribute("alt", "Volume level 3");
     }
     // Set volume for audio
-    audioHorn.volume = (event.target.value / 100);
+    audioHorn.volume = (volume / 100);
   })
   
   /* Play Button Event */
   
   playButton.addEventListener('click', (event) => {
-    if (partyHorn) {
+    if (partyHorn && volume > 0) {
       jsConfetti.addConfetti();
     }
     audioHorn.play();
